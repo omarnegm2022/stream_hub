@@ -1,5 +1,32 @@
+# Use a pipeline as a high-level helper
+from transformers import pipeline
+
+pipe = pipeline("text-classification", model="distilbert/distilbert-base-uncased-finetuned-sst-2-english")
+
+# Load model directly
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+
+tokenizer = AutoTokenizer.from_pretrained("distilbert/distilbert-base-uncased-finetuned-sst-2-english")
+model = AutoModelForSequenceClassification.from_pretrained("distilbert/distilbert-base-uncased-finetuned-sst-2-english")
+
+import os
+os.environ['HF_TOKEN'] = os.getenv("HF_TOKEN")
+
+import os
+from huggingface_hub import InferenceClient
+
+client = InferenceClient(
+    provider="auto",
+    api_key=os.environ["HF_TOKEN"],
+)
+
+
 import streamlit as st
 
 name = st.text_input("Enter your name: ")
 if name:
-	st.write(f"Hello, {name}.")
+	result = client.text_classification(
+    name,
+    model="distilbert/distilbert-base-uncased-finetuned-sst-2-english",
+)
+	st.write(f"Hello, {result[0]["label"]}.")
