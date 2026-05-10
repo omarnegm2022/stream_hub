@@ -15,4 +15,4 @@ if name:
     name,
     model="distilbert/distilbert-base-uncased-finetuned-sst-2-english",
 )
-	st.write(f"Hello, {result[0]["label"]}.")
+	st.write(f"Hello, {result}.")
